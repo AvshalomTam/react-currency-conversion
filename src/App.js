@@ -6,15 +6,15 @@ const BASE_URL = 'https://api.exchangeratesapi.io/latest'
 
 function App() {
 
-  const [currencyOptions, setCurrencyOptions] = useState(['EUR', 'CAD'])
+  const [currencyOptions, setCurrencyOptions] = useState([])
   const [fromCurrency, setFromCurrency] = useState('')
   const [toCurrency, setToCurrency] = useState('')
   const [exchangeRate, setExchangeRate] = useState()
   const [amount, setAmount] = useState(1)
   const [amountInFromCurrency, setAmountInFromCurrency] = useState(true)
 
-  let toAmount = 1
-  let fromAmount = 1
+  let toAmount, fromAmount
+  
   if (amountInFromCurrency) {
     fromAmount = amount
     toAmount = amount * exchangeRate
