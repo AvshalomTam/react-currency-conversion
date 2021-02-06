@@ -6,14 +6,15 @@ const BASE_URL = 'https://api.exchangeratesapi.io/latest'
 
 function App() {
 
-  const [currencyOptions, setCurrencyOptions] = useState([])
-  const [fromCurrency, setFromCurrency] = useState()
-  const [toCurrency, setToCurrency] = useState()
+  const [currencyOptions, setCurrencyOptions] = useState(['EUR', 'CAD'])
+  const [fromCurrency, setFromCurrency] = useState('')
+  const [toCurrency, setToCurrency] = useState('')
   const [exchangeRate, setExchangeRate] = useState()
   const [amount, setAmount] = useState(1)
   const [amountInFromCurrency, setAmountInFromCurrency] = useState(true)
 
-  let toAmount, fromAmount
+  let toAmount = 1
+  let fromAmount = 1
   if (amountInFromCurrency) {
     fromAmount = amount
     toAmount = amount * exchangeRate
@@ -33,6 +34,14 @@ function App() {
         setExchangeRate(data.rates[firstCurrency])
       })
   }, [])
+
+  useEffect(() => {
+    if (fromCurrency != null && toCurrency != null) {
+      fetch(`${BASE_URL}?base=${fromCurrency}&symbols=${toCurrency}`)
+        .then(res => res.json())
+        .then(data => setExchangeRate(data.rates[toCurrency]))
+    }
+  }, [fromCurrency, toCurrency])
 
   function handleFromAmountChange(e) {
     setAmount(e.target.value)
